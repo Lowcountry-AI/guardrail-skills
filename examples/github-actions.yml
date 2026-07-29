@@ -1,0 +1,62 @@
+# Example CI check: runs slop-scrub against any Markdown/copy files changed
+# in a pull request and fails the check if it finds AI writing tells. This is
+# the "hook" (enforced, can't be skipped by forgetting to run a command)
+# mode — it runs on GitHub's infrastructure, not the author's machine, so
+# there's no "I forgot to scrub it locally" failure mode.
+#
+# Install: copy this file to .github/workflows/slop-scrub.yml in your repo.
+# Requires an ANTHROPIC_API_KEY repo secret (Settings -> Secrets and
+# variables -> Actions). Swap the `claude` CLI step for your own tool's CI
+# invocation if you're not using Claude Code.
+
+name: slop-scrub
+
+on:
+  pull_request:
+    paths:
+      - "**.md"
+      - "content/**"
+
+jobs:
+  scrub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Get changed files
+        id: changed
+        run: |
+          files="$(git diff --name-only origin/${{ github.base_ref }}...HEAD -- '**.md' 'content/**')"
+          echo "files<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$files" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Run slop-scrub
+        if: steps.changed.outputs.files != ''
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+        run: |
+          skill="$(cat skills/slop-scrub/SKILL.md)"
+          fail=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            [ -f "$f" ] || continue
+            report="$(claude -p "$skill
+
+Scrub this file. If everything is clean, respond with exactly the line CLEAN and nothing else. If anything needs fixing, respond with exactly the line NEEDS_FIXES and then the full report.
+
+FILE: $f
+$(cat "$f")")"
+            if [[ "$report" != CLEAN* ]]; then
+              echo "::error file=$f::slop-scrub found issues — see job log for the full report"
+              echo "$report"
+              fail=1
+            fi
+          done <<< "$CHANGED_FILES"
+          exit "$fail"
