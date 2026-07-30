@@ -10,6 +10,18 @@ Three small, independent guardrails for AI coding agents. Each one works two way
 
 **Why it's useful:** anything you publish under your own name (emails, social posts, docs, blog content) reads better and less generic once these tells are gone.
 
+**What it looks like.** Before:
+
+> In today's fast-paced world, developers navigate an increasingly complex landscape of tooling. Our robust CLI empowers engineers to seamlessly unlock their workflow potential — it's not just a task runner, it's a paradigm shift. Studies show 87% of developers lose hours to context switching. Ready to transform how your team ships? Drop a comment below.
+
+After:
+
+> Most task runners make you learn a new config language. This one reads the scripts already in your `package.json` and runs them in parallel, without the output interleaving into mush.
+
+Caught in that one paragraph: eight banned words and phrases (`in today's fast-paced world`, `navigate`, `landscape`, `robust`, `empowers`, `seamlessly`, `unlock`, `paradigm`), an "it's not X, it's Y" construction, an em dash, a statistic with no source behind it, and an engagement-bait closer.
+
+**The banned-word list is a starting point, not a ruling.** You'll disagree with parts of it, and you should. `leverage` and `robust` have honest uses. Open `skills/slop-scrub/SKILL.md`, edit the list in item 1, and make it yours. Forking it into something opinionated about *your* writing is the intended use, not a misuse.
+
 **As a skill:** copy `skills/slop-scrub/SKILL.md` into your tool's skills/instructions folder (for Claude Code: `~/.claude/skills/slop-scrub/`). In Claude Code it's then available as `/slop-scrub`. On any other AI tool, paste everything below the `---` frontmatter into your system prompt or custom instructions; it's self-contained.
 
 **As a hook:** see [`examples/pre-commit-hook.sh`](examples/pre-commit-hook.sh) or [`examples/github-actions.yml`](examples/github-actions.yml) for how to force it to run on every commit or PR instead of waiting for the agent to remember.
