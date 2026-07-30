@@ -44,7 +44,7 @@ Caught in that one paragraph: eight banned words and phrases (`in today's fast-p
 
 ## inject-orchestration-recipe.sh
 
-A Claude Code hook. It's enforcement, not something an agent opts into, so there's no "skill" mode for it: install it and it just runs.
+A `UserPromptSubmit` hook. It's enforcement, not something an agent opts into, so there's no "skill" mode for it: install it and it just runs. **It works on both Claude Code and Codex CLI with no changes to the script.** The two tools ship the same hook contract: same event name, same `prompt` field on stdin, same `hookSpecificOutput.additionalContext` on stdout. Only the config file differs.
 
 **What it is:** a hook that auto-injects your own standing multi-agent-workflow instructions the moment your prompt matches a trigger phrase.
 
@@ -52,7 +52,41 @@ A Claude Code hook. It's enforcement, not something an agent opts into, so there
 
 **Why it's useful:** consistent multi-agent runs without re-explaining your standards each time, and without bloating every other session.
 
-**Install:** copy `hooks/inject-orchestration-recipe.sh` to `~/.claude/hooks/`, wire it into `~/.claude/settings.json` under `UserPromptSubmit`, then edit `TRIGGER_RE` near the top of the script to match your own trigger phrase, and edit the recipe text further down to match how *you* actually want a fleet run. The shipped version is one opinionated example, not a standard to follow verbatim.
+**Install (Claude Code):** copy the script to `~/.claude/hooks/`, `chmod +x` it, and add this to `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/inject-orchestration-recipe.sh" }] }
+    ]
+  }
+}
+```
+
+**Install (Codex CLI):** copy the same script to `~/.codex/hooks/`, `chmod +x` it, and add this to `~/.codex/hooks.json`:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "~/.codex/hooks/inject-orchestration-recipe.sh" }] }
+    ]
+  }
+}
+```
+
+Requires `jq` on your PATH. Codex also accepts an inline `[[hooks.UserPromptSubmit]]` table in `~/.codex/config.toml` if you'd rather keep one config file, and reads a repo-local `.codex/hooks.json` for per-project setups. Cross-tool compatibility verified against Codex CLI's documented hook contract as of July 2026.
+
+**Then make it yours:** edit `TRIGGER_RE` near the top of the script to your own trigger phrase, and edit the recipe text below it to match how *you* actually want a fleet run. The shipped version is one opinionated example, not a standard to follow verbatim.
+
+---
+
+## Contributing
+
+Issues are open. Bug reports and additions to the banned-word list are both welcome.
+
+Pull requests aren't accepted, so please fork instead. These checklists only work when they're opinionated about *your* writing and *your* code, and the fastest route to that is your own copy with your own rules.
 
 ---
 
