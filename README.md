@@ -4,7 +4,7 @@ Three small, independent guardrails for AI coding agents. Each one works two way
 
 ## slop-scrub
 
-**What it is:** a 12-point checklist that catches AI writing tells: em dashes, banned words ("delve," "robust," "unlock"), fake profundity, fabricated stats, engagement-bait endings.
+**What it is:** a 13-point checklist that catches AI writing tells: em dashes, banned words ("delve," "robust," "unlock"), fake profundity, fabricated stats, engagement-bait endings, and staccato runs of verdict-like sentences.
 
 **Why it was built:** AI-generated copy has predictable, catchable patterns that make it read as obviously AI-written. Most of them are individually easy to miss but obvious in aggregate, so a one-off glance at a draft doesn't reliably catch them. A checklist run every time does.
 
@@ -23,6 +23,8 @@ Caught in that one paragraph: eight banned words and phrases (`in today's fast-p
 **The banned-word list is a starting point, not a ruling.** You'll disagree with parts of it, and you should. `leverage` and `robust` have honest uses. Open `skills/slop-scrub/SKILL.md`, edit the list in item 1, and make it yours. Forking it into something opinionated about *your* writing is the intended use, not a misuse.
 
 **As a skill:** copy `skills/slop-scrub/SKILL.md` into your tool's skills/instructions folder (for Claude Code: `~/.claude/skills/slop-scrub/`). In Claude Code it's then available as `/slop-scrub`. On any other AI tool, paste everything below the `---` frontmatter into your system prompt or custom instructions; it's self-contained.
+
+To preserve a project's writing voice, put two or three short, author-approved samples and one reader description in a root `VOICE.md`; start from [`examples/VOICE.md.template`](examples/VOICE.md.template).
 
 **As a hook:** see [`examples/pre-commit-hook.sh`](examples/pre-commit-hook.sh) or [`examples/github-actions.yml`](examples/github-actions.yml) for how to force it to run on every commit or PR instead of waiting for the agent to remember.
 
@@ -84,9 +86,7 @@ Requires `jq` on your PATH. Codex also accepts an inline `[[hooks.UserPromptSubm
 
 ## Contributing
 
-Issues are open. Bug reports and additions to the banned-word list are both welcome.
-
-Pull requests aren't accepted, so please fork instead. These checklists only work when they're opinionated about *your* writing and *your* code, and the fastest route to that is your own copy with your own rules.
+Issues and pull requests are open. Bug reports, focused improvements, and additions to the banned-word list are welcome. These checklists work best when you adapt them to your writing and code, so forking them for your own rules is welcome too.
 
 ---
 
