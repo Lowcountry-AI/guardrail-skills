@@ -161,7 +161,7 @@ CLEANED TEXT:
 [full text with all fixes applied]
 ```
 
-If the text is clean on all 13 items, say so. But you still have to check each one and report it. The discipline is the point.
+Check and report all 13 items, even when each one is clean.
 
 ## Severity (when prioritizing fixes)
 
@@ -176,7 +176,7 @@ If the text is clean on all 13 items, say so. But you still have to check each o
 **Strong rewrite recommended:**
 
 - Tricolon crutches
-- Staccato runs of three or more qualifying sentences, or two qualifying uncontracted sentences
+- Staccato runs of three or more qualifying sentences, and two qualifying sentences when both are uncontracted
 - Mid-sentence self-questions
 - Sensory language on abstracts
 - Pseudo-profound endings
