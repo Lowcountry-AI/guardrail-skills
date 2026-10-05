@@ -21,7 +21,7 @@ The text to scrub is one of:
 
 If no text is provided and no draft is in scope, ask the user what to scrub. Don't guess.
 
-## The 12-Item Checklist
+## The 13-Item Checklist
 
 Run every item. For EACH item, report what you found. "Clean" is acceptable only if you actually checked. Do not skip items. Do not batch them. The whole point is to catch the thing you'd skip.
 
@@ -112,24 +112,32 @@ Flag every unsourced claim. Either find a source, mark it as illustrative, or cu
 
 ### 12. Contraction check
 
-Zero tolerance, same tier as the em dash check (#10). AI writes the expanded form; humans contract. This skill only ever runs on customer-facing copy, so there is no emphasis exception. Replace every uncontracted form with its contraction.
+Check for stiff, over-expanded prose, but do not force contractions into every sentence. AI often avoids contractions even when the surrounding voice uses them. Where a contraction sounds natural for this writer and reader, use it; where the expanded form adds emphasis, fits a formal passage, or matches the author's samples, keep it. Preserve contractions already present when they fit.
 
-- `do not→don't`, `does not→doesn't`, `did not→didn't`
-- `cannot→can't`, `will not→won't`, `would not→wouldn't`, `should not→shouldn't`, `could not→couldn't`
-- `is not→isn't`, `are not→aren't`, `was not→wasn't`, `were not→weren't`
-- `have not→haven't`, `has not→hasn't`, `had not→hadn't`
-- `it is→it's`, `that is→that's`, `there is→there's`, `here is→here's`, `what is→what's`
-- `I am→I'm`, `you are→you're`, `we are→we're`, `they are→they're`
-- `I will→I'll`, `you will→you'll`, `we will→we'll`, `it will→it'll`
-- `I have→I've`, `you have→you've`, `we have→we've`, `I would→I'd`, `you would→you'd`
+Examples of common contractions include `do not` / `don't`, `cannot` / `can't`, `will not` / `won't`, `it is` / `it's`, `we are` / `we're`, and `I have` / `I've`. Check meaning and grammar before changing a form. In particular, `let us know` and `let us help you` mean _allow us_, so do not change them to `let's`.
 
-One guard so the rule never creates errors: only contract where it's grammatically correct English. The trap is `let us` — "let us know" and "let us help you" mean _allow us_, not _let's_. Leave those alone. Everywhere else, contract.
+Flag repeated uncontracted forms when they make conversational copy sound formal or unlike its author. Do not treat an isolated expanded form as an error by itself.
+
+### 13. Staccato check
+
+Look for adjacent runs of two or more sentences where every sentence is short (about 12 words or fewer), declarative, a complete claim on its own, parallel in shape, and unconnected to the next sentence by a word or phrase such as `because`, `so`, `which`, `when`, `but`, or `and`. The run reads like a list of verdicts.
+
+Example to rewrite: "The same request produces a different plan tomorrow. A passing test does not carry forward." Join the claims: "The same request produces a different plan tomorrow, so a passing test doesn't carry forward."
+
+- Three or more qualifying sentences in a row: rewrite the run.
+- Two qualifying sentences in a row: flag the run for review. Rewrite it when both sentences also avoid contractions.
+
+Join the claims with a connective that states their relationship, vary sentence length on purpose, or add a concrete example that supports the claim. One short sentence after a longer one can work when the contrast is the point.
+
+Exempt headlines, bullets, calls to action, captions, table cells, and quoted speech from a named person.
 
 ## Output Format
 
 ```
 SLOP SCRUB REPORT
 =================
+
+VOICE: [USED: project-root VOICE.md | NOT FOUND: offer to build one from two author-selected pieces]
 
 1. Word scan: [CLEAN | FOUND: list with line numbers]
 2. Construction scan: [CLEAN | FOUND: list]
@@ -143,6 +151,7 @@ SLOP SCRUB REPORT
 10. Em dash check: [CLEAN | FOUND: count]
 11. Source check: [PASS | FLAGGED: list]
 12. Contraction check: [CLEAN | FOUND: list]
+13. Staccato check: [CLEAN | FLAGGED: list]
 
 CHANGES MADE:
 - [original phrase] → [replacement phrase]
@@ -152,7 +161,7 @@ CLEANED TEXT:
 [full text with all fixes applied]
 ```
 
-If the text is clean on all 12 items, say so. But you still have to check each one and report it. The discipline is the point.
+Check and report all 13 items, even when each one is clean.
 
 ## Severity (when prioritizing fixes)
 
@@ -160,7 +169,6 @@ If the text is clean on all 12 items, say so. But you still have to check each o
 
 - Any banned word
 - Any em dash in output text
-- Any uncontracted form (`do not`→`don't`) outside the `let us` guard
 - "It's not X, it's Y" structures
 - Fabricated stats without source notes
 - Engagement-bait questions at the end of posts ("What do you think?")
@@ -168,6 +176,7 @@ If the text is clean on all 12 items, say so. But you still have to check each o
 **Strong rewrite recommended:**
 
 - Tricolon crutches
+- Staccato runs of three or more qualifying sentences, and two qualifying sentences when both are uncontracted
 - Mid-sentence self-questions
 - Sensory language on abstracts
 - Pseudo-profound endings
@@ -182,6 +191,8 @@ If the text is clean on all 12 items, say so. But you still have to check each o
 ## Rules
 
 - This is a FILTER, not a voice. Scrubbing should remove slop without flattening the writer's voice. If the project has a defined voice (a `brand/` folder, a voice guide, etc.), read it first so you preserve what makes the writing distinctive.
+- If a project-root `VOICE.md` exists, read it in full on every run. Use it to calibrate sentence length, directness, vocabulary, and use of `I` versus `we`. Ask: would this author say this sentence aloud to this reader? After scrubbing, compare the result with the samples. If a reader could tell which samples the author wrote but could not recognize the cleaned text as the same author's work, revise the scrub so it preserves the voice.
+- A voice sample calibrates style; it never permits a banned item. Never scrub or edit the sample itself. If no project-root `VOICE.md` exists, state that in the report and offer to build one from two short pieces the author selects. Do not invent a voice or write sample pieces on the author's behalf.
 - After scrubbing, do one final em dash sweep. Em dashes have a way of sneaking back in while fixing other issues. This happens more than you'd think.
 - If the user asks you to scrub a draft and you can't find one to scrub, ask. Don't invent text to scrub.
 - Never apologize for finding slop. Finding it is the job. Reporting "clean" when you didn't actually check is the failure.
